@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadMimi-DotNet", "MadMimi-DotNet\MadMimi-DotNet.csproj", "{933CF4D3-D5C2-4838-B3F2-4FDE7F8A032D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{449A0856-C6C8-411C-B93C-435B5621ED8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{449A0856-C6C8-411C-B93C-435B5621ED8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{449A0856-C6C8-411C-B93C-435B5621ED8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{449A0856-C6C8-411C-B93C-435B5621ED8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{449A0856-C6C8-411C-B93C-435B5621ED8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{933CF4D3-D5C2-4838-B3F2-4FDE7F8A032D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933CF4D3-D5C2-4838-B3F2-4FDE7F8A032D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933CF4D3-D5C2-4838-B3F2-4FDE7F8A032D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933CF4D3-D5C2-4838-B3F2-4FDE7F8A032D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = MadMimi-DotNet\MadMimi-DotNet.csproj
+	EndGlobalSection
+EndGlobal
