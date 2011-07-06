@@ -9,6 +9,7 @@ using System.Net.Mail;
 
 namespace MadMimi {
 	public class Api {
+		const string FORM_URL_ENCODED = "application/x-www-form-urlencoded";
 		
 		public Config Config { get; set; }
 
@@ -44,40 +45,30 @@ namespace MadMimi {
 			Config = config;
 		}
 		
-		public Result AddAudienceListMembership (string email, string list)
+		public Result AddAudienceListMembership(string email, string list)
 		{
-			string data = String.Format ("email={0}", HttpUtility.UrlEncode (email));
+			Parameters parameters = new Parameters ();
+			parameters.Add(Parameters.EMAIL, email);
 			string path = String.Format ("/audience_lists/{0}/add", HttpUtility.UrlEncode (list));
-			return Post (path, data);
+			return Post (path, parameters);
 		}
 		
-		public Result SendEmail (MailAddress sender, string subject, MailAddress recipient, string html, string plainText)
+		public Result SendEmail(MailAddress fromAddress, string subject, MailAddress recipientAddress, string rawHtml, string rawPlainText)
 		{
-			string data = String.Format (
-				"from={0}&subject={1}&recipients={2}&promotion_name={1}", 
-				HttpUtility.UrlEncode (sender.ToString ()), 
-				HttpUtility.UrlEncode (subject), 
-				HttpUtility.UrlEncode (recipient.ToString ())
-			);
-			if (html != null) {
-				data += "&raw_html=" + HttpUtility.UrlEncode(html);
-			}
-			if (plainText != null) {
-				data += "&raw_plain_text=" + HttpUtility.UrlEncode (plainText);
-			}
-			return Post ("/mailer", data, true);
+			TransactionalMailingParameters parameters = new TransactionalMailingParameters (fromAddress, subject, recipientAddress, rawHtml, rawPlainText);
+			return Post ("/mailer", parameters, true);
 		}
 		
-		public Result SendPromotion(Promotion promotion) {
-			return new Result(new NotImplementedException());
+		public Result SendEmail(Parameters parameters) {
+			return Post ("/mailer", parameters, true);
 		}
 		
-		private Result Post (string path, string data)
+		private Result Post (string path, Parameters parameters)
 		{
-			return Post (path, data, false);
+			return Post (path, parameters, false);
 		}
 
-		private Result Post(string path, string data, bool ssl)
+		private Result Post(string path, Parameters parameters, bool ssl)
 		{
 			try {
 				if (Config.SkipSslValidation) {
@@ -87,31 +78,31 @@ namespace MadMimi {
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create (Config.GetUrl (path, ssl));
 				
 				request.Method = "POST";
-				request.ContentType = "application/x-www-form-urlencoded";
+				request.ContentType = FORM_URL_ENCODED;
 				request.ServicePoint.Expect100Continue = false;
 				
-				if (data != null) {
-					if (Config.UTF8Encode) {
-						UTF8Encoding encoding = new UTF8Encoding ();
-						byte[] bytes = encoding.GetBytes (data);
-						request.ContentLength = bytes.Length;
-					
-						Stream stream = request.GetRequestStream ();
-						stream.Write (bytes, 0, bytes.Length);
-						stream.Close ();
-					} else {
-						request.ContentLength = data.Length;
-						StreamWriter writer = new StreamWriter (request.GetRequestStream (), Encoding.ASCII);
-						writer.Write (data);
-						writer.Close ();
+				if (parameters != null) {
+					string data = parameters.ToParameterString ();
+					if (data.Length > 0) {
+						if (Config.UTF8Encode) {
+							UTF8Encoding encoding = new UTF8Encoding ();
+							byte[] bytes = encoding.GetBytes (data);
+							request.ContentLength = bytes.Length;
+						
+							Stream stream = request.GetRequestStream ();
+							stream.Write (bytes, 0, bytes.Length);
+							stream.Close ();
+						} else {
+							request.ContentLength = data.Length;
+							StreamWriter writer = new StreamWriter (request.GetRequestStream (), Encoding.ASCII);
+							writer.Write (data);
+							writer.Close ();
+						}
 					}
 				} else {
 					request.ContentLength = 0;
 				}
 				
-				Console.WriteLine (Config.GetUrl (path, ssl));
-				Console.WriteLine (data);
-
 				HttpWebResponse response = (HttpWebResponse)(request.GetResponse ());
 
 				return new Result (response);
@@ -128,16 +119,17 @@ namespace MadMimi {
 			}
 		}
 		
-		private	Result Get (string path, string data)
+		private
+			Result Get(string path, Parameters parameters)
 		{
 			try {
-				HttpWebRequest request = (HttpWebRequest)WebRequest.Create (Config.GetUrl (path, false, data));
-				request.Method = "GET";
-				request.ContentType = "application/x-www-form-urlencoded";
-				request.ContentLength = 0;
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create (Config.GetUrl (path, false, parameters));
+			request.Method = "GET";
+			request.ContentType = FORM_URL_ENCODED;
+			request.ContentLength = 0;
 				
-				return new Result ((HttpWebResponse)request.GetResponse ());
-			} catch (WebException webex) {
+			return new Result ((HttpWebResponse)request.GetResponse ());
+		} catch (WebException webex) {
 				return new Result (webex.Response);
 			} catch (Exception ex) {
 				return new Result (ex);

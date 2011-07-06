@@ -40,6 +40,11 @@
     <Compile Include="Config.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Promotion.cs" />
+    <Compile Include="AudienceList.cs" />
+    <Compile Include="Parameters.cs" />
+    <Compile Include="TransactionalMailingParameters.cs" />
+    <Compile Include="MissingMacroException.cs" />
+    <Compile Include="MissingParameterException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

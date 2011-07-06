@@ -10,6 +10,9 @@ namespace MadMimi
 		public string Username { get; set; }
 		public string ApiKey { get; set; }
 		
+		const string USERNAME = "username";
+		const string API_KEY = "api_key";
+		
 		public Config ()
 		{
 			SkipSslValidation = false;
@@ -22,17 +25,20 @@ namespace MadMimi
 			return GetUrl(path, false);
 		}
 		
-		public string GetUrl (string path, bool ssl)
+		public string GetUrl(string path, bool ssl)
 		{
 			if (path.StartsWith ("/")) {
-				path = path.Substring(1);
+				path = path.Substring (1);
 			}
-			return String.Format ("http{0}://{1}/{2}?username={3}&api_key={4}", ssl ? "s" : "", ApiEndPoint, path, Username, ApiKey);
+			Parameters parameters = new Parameters ();
+			parameters.Add (USERNAME, Username);
+			parameters.Add (API_KEY, ApiKey);
+			return GetUrl(path, ssl, parameters);
 		}
 
-		public string GetUrl (string path, bool ssl, string paramString)
+		public string GetUrl(string path, bool ssl, Parameters parameters)
 		{
-			return GetUrl (path, ssl) + "&" + paramString;
+			return String.Format ("http{0}://{1}/{2}?{3}", ssl ? "s" : "", ApiEndPoint, path, parameters.ToParameterString ());
 		}
 	}
 }
