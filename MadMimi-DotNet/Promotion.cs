@@ -24,6 +24,7 @@ namespace MadMimi
 		
 		public Promotion ()
 		{
+			// Defaults
 			PreventResend = false;
 			TrackLinks = true;
 			CheckSuppressed = false;

@@ -119,17 +119,16 @@ namespace MadMimi {
 			}
 		}
 		
-		private
-			Result Get(string path, Parameters parameters)
+		private	Result Get(string path, Parameters parameters)
 		{
 			try {
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create (Config.GetUrl (path, false, parameters));
-			request.Method = "GET";
-			request.ContentType = FORM_URL_ENCODED;
-			request.ContentLength = 0;
-				
-			return new Result ((HttpWebResponse)request.GetResponse ());
-		} catch (WebException webex) {
+				request.Method = "GET";
+				request.ContentType = FORM_URL_ENCODED;
+				request.ContentLength = 0;
+					
+				return new Result ((HttpWebResponse)request.GetResponse ());
+			} catch (WebException webex) {
 				return new Result (webex.Response);
 			} catch (Exception ex) {
 				return new Result (ex);

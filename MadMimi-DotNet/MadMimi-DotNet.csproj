@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MadMimi</RootNamespace>
     <AssemblyName>MadMimi-DotNet</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +32,7 @@
     <Reference Include="System" />
     <Reference Include="System.Web" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -45,6 +45,10 @@
     <Compile Include="TransactionalMailingParameters.cs" />
     <Compile Include="MissingMacroException.cs" />
     <Compile Include="MissingParameterException.cs" />
+    <Compile Include="AudienceMember.cs" />
+    <Compile Include="AudienceListCollection.cs" />
+    <Compile Include="AudienceMemberCollection.cs" />
+    <Compile Include="AudienceMemberColumns.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
